@@ -1,0 +1,54 @@
+{% extends 'base.html'%} 
+{% block content %} 
+{% for message in
+get_flashed_messages() %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{%endfor%} 
+{% if name%}
+
+<h1  id="header ">User Added</h1>
+<br>
+<table class="table table-hover table-bordered shadow mb-5 mx-5 ml-5 bg-body-tertiary rounded">
+    {% for our_user in our_users%}
+    <tr>
+        <td>
+    {{ our_user.id }}. <a href="{{url_for('update', id=our_user.id )}}">{{our_user.name}}</a> - {{ our_user.email}} 
+    </td>
+    </tr>
+        <br/>
+    
+    {% endfor %}
+    </table>
+
+{% else %}
+    <h1 class="mt-5 mb-0 mx-4 ">User List:</h1>
+<br />
+<div class="shadow p-3 mb-5 m-5 bg-body-tertiary rounded">
+<form  action="/update/{{name_to_update.id}}" method="POST" class="m-5">
+    {{form.hidden_tag() }} 
+    {{ form.name.label(class="form-label justify-content" , id="header") }} 
+    {{ form.name(class="form-control justify-content", value=name_to_update.name) }}
+    <br />
+    {{ form.email.label(class="form-label justify-content" , id="header") }} 
+    {{ form.email(class="form-control justify-content",value=name_to_update.email) }}
+    <br />
+    {{ form.submit(class="btn btn-primary ") }}
+</form>
+</div>
+<br/>
+<table class="table table-hover table-bordered shadow mb-5 mx-5 ml-5 bg-body-tertiary rounded table-sm">
+{% for our_user in our_users%}
+<tr>
+    <td>
+{{ our_user.id }}. <a href="{{url_for('update', id=our_user.id )}}">{{our_user.name}}</a> - {{ our_user.email}} 
+</td>
+</tr>
+    <br/>
+
+{% endfor %}
+</table>
+{% endif %} 
+{% endblock%} }

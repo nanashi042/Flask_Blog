@@ -1,0 +1,26 @@
+#header{
+	color: #f005ff;	
+	margin-left: 300px;
+}
+
+#img_1{
+	height: 600px;
+	width: 800px;
+}
+body{
+
+	
+	background-color: #f4f4f4;
+
+}
+
+#bg{
+	opacity: 0.6;
+	background-size: cover;
+}
+
+#para{
+/*	display: flex;*/
+	color: red;
+/*	background-color: black;*/
+}
