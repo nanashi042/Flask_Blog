@@ -15,7 +15,7 @@ get_flashed_messages() %}
     {% for our_user in our_users%}
     <tr>
         <td>
-    {{ our_user.id }}. <a href="{{url_for('update', id=our_user.id )}}">{{our_user.name}}</a> - {{ our_user.email}} 
+    {{ our_user.id }}. <a href="{{url_for('update', id=our_user.id )}}">{{our_user.name}}</a> - {{ our_user.email}} - {{our_user.fav_ani}}
     </td>
     </tr>
         <br/>
@@ -34,6 +34,9 @@ get_flashed_messages() %}
     <br />
     {{ form.email.label(class="form-label justify-content" , id="header") }} 
     {{ form.email(class="form-control justify-content",value=name_to_update.email) }}
+    <br />
+    {{ form.fav_ani.label(class="form-label justify-content" , id="header") }} 
+    {{ form.fav_ani(class="form-control justify-content", value=name_to_update.fav_ani) }}
     <br />
     {{ form.submit(class="btn btn-primary ") }}
 </form>

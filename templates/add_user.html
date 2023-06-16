@@ -15,7 +15,7 @@ get_flashed_messages() %}
     {% for our_user in our_users%}
     <tr>
         <td>
-    {{ our_user.id }}. <a href="{{url_for('update', id=our_user.id )}}">{{our_user.name}}</a> - {{ our_user.email}} 
+    {{ our_user.id }}. <a href="{{url_for('update', id=our_user.id )}}">{{our_user.name}}</a> - {{ our_user.email}}  - {{ our_user.fav_ani }} - <a href="{{url_for('delete', id=our_user.id )}}">Delete</a>
     </td>
     </tr>
         <br/>
@@ -35,6 +35,9 @@ get_flashed_messages() %}
     {{ form.email.label(class="form-label justify-content" , id="header") }} 
     {{ form.email(class="form-control justify-content") }}
     <br />
+    {{ form.fav_ani.label(class="form-label justify-content" , id="header") }} 
+    {{ form.fav_ani(class="form-control justify-content") }}
+    <br />
     {{ form.submit(class="btn btn-primary ") }}
 </form>
 </div>
@@ -43,7 +46,7 @@ get_flashed_messages() %}
 {% for our_user in our_users%}
 <tr>
     <td>
-{{ our_user.id }}. <a href="{{url_for('update', id=our_user.id )}}">{{our_user.name}}</a> - {{ our_user.email}} 
+{{ our_user.id }}. <a href="{{url_for('update', id=our_user.id )}}">{{our_user.name}}</a> - {{ our_user.email}} - {{ our_user.fav_ani }} - <a href="{{url_for('delete', id=our_user.id )}}">Delete</a>
 </td>
 </tr>
     <br/>
