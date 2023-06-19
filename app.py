@@ -1,11 +1,11 @@
 from flask import Flask, render_template , flash,request
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import StringField, SubmitField , PasswordField , BooleanField , ValidationError
+from wtforms.validators import DataRequired, EqualTo ,  length
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
-
+from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -26,6 +26,20 @@ class Users(db.Model):
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     fav_ani = db.Column(db.String(120))
 
+    password_hash = db.Column(db.String(128))
+    
+    @property
+    def password(self):
+        raise AttributeError("Unreadble Attribute")
+    
+    @password.setter
+    def password(self,password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self,password):
+        return check_password_hash(self.password_hash,password)
+
+
     def __repr__(self) -> str:
         return '<Name %r>' % self.name
 
@@ -33,7 +47,10 @@ class UserForm(FlaskForm):
     name = StringField("Name" , validators=[DataRequired()])
     email = StringField("Email" , validators=[DataRequired()])
     fav_ani = StringField("Enter your favourite anime ")
-    submit = SubmitField("Submit") 
+    password_hash = PasswordField("Password",validators=[DataRequired(), EqualTo("password_hash2", message="Passwords must Match !")])
+    password_hash2 = PasswordField("Confirm Password",validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
 #create a form class
 class name_form(FlaskForm):
     name = StringField("what's your Name" , validators=[DataRequired()])
@@ -85,13 +102,15 @@ def add_user():
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
         if user is None :
-            user = Users(name=form.name.data, email = form.email.data , fav_ani = form.fav_ani.data)
+            hashed_pw = generate_password_hash(form.password_hash.data, "sha256")
+            user = Users(name=form.name.data, email = form.email.data , fav_ani = form.fav_ani.data , password_hash = hashed_pw)
             db.session.add(user)
             db.session.commit()
         name = form.name.data
         form.name.data = ''
         form.email.data = ''
         form.fav_ani.data = ''
+        form.password_hash.data = ''
         flash('User added successfully')
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", form= form, name=name ,our_users= our_users , )
